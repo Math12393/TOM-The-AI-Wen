@@ -6,35 +6,118 @@
 <title>Tom the AI</title>
 <style>
 :root {
---bg: #eef1f6; --card: #ffffff; --text: #111; --muted: #6c7a92;
---accent: #4e7dff; --user: #dce7ff; --ai: #f2f4f7;
+--bg: #eef1f6;
+--card: #ffffff;
+--text: #111;
+--muted: #6c7a92;
+--accent: #4e7dff;
+--user: #dce7ff;
+--ai: #f2f4f7;
 }
 [data-theme="dark"] {
---bg: #0d1117; --card: #161b22; --text: #e6eef8; --muted: #9fb0c9;
---accent: #4ea1ff; --user: #0b4a87; --ai: #111b27;
+--bg: #0d1117;
+--card: #161b22;
+--text: #e6eef8;
+--muted: #9fb0c9;
+--accent: #4ea1ff;
+--user: #0b4a87;
+--ai: #111b27;
 }
-html, body {height:100%; margin:0; background:var(--bg); color:var(--text); font-family:Inter, system-ui, sans-serif;}
-.container {max-width:880px; margin:20px auto; padding:16px;}
-header {display:flex; align-items:center; gap:14px; margin-bottom:12px;}
-.logo {width:56px; height:56px; background:linear-gradient(135deg, #4e7dff, #8b5cff); border-radius:14px; display:flex; align-items:center; justify-content:center; color:white; font-size:28px; font-weight:800; box-shadow:0 6px 18px rgba(0,0,0,0.15);}
-h1 {margin:0; font-size:22px;}
-.controls {margin-left:auto; display:flex; align-items:center; gap:10px;}
+html, body {
+height: 100%;
+margin: 0;
+background: var(--bg);
+color: var(--text);
+font-family: Inter, system-ui, sans-serif;
+}
+.container {
+max-width: 880px;
+margin: 20px auto;
+padding: 16px;
+}
+header {
+display: flex;
+align-items: center;
+gap: 14px;
+margin-bottom: 12px;
+}
+.logo {
+width: 56px;
+height: 56px;
+background: linear-gradient(135deg, #4e7dff, #8b5cff);
+border-radius: 14px;
+display: flex;
+align-items: center;
+justify-content: center;
+color: white;
+font-size: 28px;
+font-weight: 800;
+box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+h1 {
+margin: 0;
+font-size: 22px;
+}
+.controls {
+margin-left: auto;
+display: flex;
+align-items: center;
+gap: 10px;
+}
 label { color: var(--muted); font-size: 13px; }
-#chat {background:var(--card); border-radius:14px; height:65vh; overflow-y:auto; padding:16px; margin-top:8px; box-shadow:0 8px 22px rgba(0,0,0,0.09);}
-.msg {display:flex; margin:10px 0;}
-.bubble {max-width:75%; padding:13px 16px; border-radius:14px; line-height:1.4; box-shadow:0 3px 8px rgba(0,0,0,0.06);}
-.user {margin-left:auto; background:var(--user); border-bottom-right-radius:6px;}
-.ai {margin-right:auto; background:var(--ai); border-bottom-left-radius:6px;}
-.inputRow {display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;}
-input[type="text"] {flex:1; padding:13px; border-radius:12px; border:1px solid #d0d7de; background:transparent; color:var(--text); font-size:15px;}
-select {padding:12px; border-radius:12px; border:1px solid #d0d7de; background:var(--card); font-size:14px; cursor:pointer;}
-button {padding:12px 15px; border-radius:12px; border:none; background:var(--accent); color:white; cursor:pointer; font-size:15px;}
+#chat {
+background: var(--card);
+border-radius: 14px;
+height: 65vh;
+overflow-y: auto;
+padding: 16px;
+margin-top: 8px;
+box-shadow: 0 8px 22px rgba(0,0,0,0.09);
+}
+.msg { display: flex; margin: 10px 0; }
+.bubble {
+max-width: 75%;
+padding: 13px 16px;
+border-radius: 14px;
+line-height: 1.4;
+box-shadow: 0 3px 8px rgba(0,0,0,0.06);
+}
+.user { margin-left: auto; background: var(--user); border-bottom-right-radius: 6px; }
+.ai { margin-right: auto; background: var(--ai); border-bottom-left-radius: 6px; }
+.inputRow { display: flex; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
+input[type="text"] {
+flex: 1;
+padding: 13px;
+border-radius: 12px;
+border: 1px solid #d0d7de;
+background: transparent;
+color: var(--text);
+font-size: 15px;
+}
+button {
+padding: 12px 15px;
+border-radius: 12px;
+border: none;
+background: var(--accent);
+color: white;
+cursor: pointer;
+font-size: 15px;
+}
 button#clearBtn { background:#ff6666; }
-.typing .dot {height:7px; width:7px; background:var(--muted); border-radius:50%; display:inline-block; margin-right:4px; opacity:0; animation: blink 1.2s infinite;}
-.typing .dot:nth-child(2){ animation-delay:.15s; }
-.typing .dot:nth-child(3){ animation-delay:.3s; }
-@keyframes blink {0%{opacity:0}40%{opacity:1}80%{opacity:0}100%{opacity:0}}
-.error {color:#ff6666; margin-top:8px;}
+.typing .dot {
+height: 7px;
+width: 7px;
+background: var(--muted);
+border-radius: 50%;
+display: inline-block;
+margin-right: 4px;
+opacity: 0;
+animation: blink 1.2s infinite;
+}
+.typing .dot:nth-child(2){ animation-delay: .15s }
+.typing .dot:nth-child(3){ animation-delay: .3s }
+@keyframes blink { 0% { opacity:0 } 40% { opacity:1 } 80% { opacity:0 } 100% { opacity:0 } }
+.error { color: #ff6666; margin-top: 8px; }
 </style>
 </head>
 <body>
@@ -50,16 +133,6 @@ button#clearBtn { background:#ff6666; }
 <input id="darkToggle" type="checkbox" />
 </div>
 </header>
-
-<div style="margin-bottom:10px;">
-<label for="persona">Select Tom's type:</label>
-<select id="persona">
-<option value="human">Human Tom</option>
-<option value="coder">Tom the Coder</option>
-<option value="researcher">Tom the Researcher</option>
-<option value="image">Tom the Image AI (Coming Soon)</option>
-</select>
-</div>
 
 <div id="chat"></div>
 
@@ -85,7 +158,6 @@ const sendBtn = document.getElementById("sendBtn");
 const clearBtn = document.getElementById("clearBtn");
 const errorDiv = document.getElementById("error");
 const darkToggle = document.getElementById("darkToggle");
-const personaSelect = document.getElementById("persona");
 
 // ===== Theme =====
 const savedTheme = localStorage.getItem("theme") || "light";
@@ -101,104 +173,94 @@ localStorage.setItem("theme", theme);
 const userKey = localStorage.getItem("userKey") || ("u_" + Math.random().toString(36).slice(2,9));
 localStorage.setItem("userKey", userKey);
 
-// ===== Load chat history per persona =====
-function loadLocalHistory(){
+// ===== Load chat history =====
+function loadLocalHistory() {
 const history = JSON.parse(localStorage.getItem("chat_history") || "[]");
 chatDiv.innerHTML = "";
-history.filter(m => m.persona===personaSelect.value).forEach(m => addMessageToUI(m.from, m.text, false, m.persona));
+history.forEach(m => addMessageToUI(m.from, m.text, false));
 chatDiv.scrollTop = chatDiv.scrollHeight;
 }
 
 // ===== Add message to UI =====
-function addMessageToUI(from, text, save=true, persona=personaSelect.value){
+function addMessageToUI(from, text, save=true){
 const m = document.createElement("div");
 m.className = "msg";
 const b = document.createElement("div");
-b.className = "bubble " + (from==="user"?"user":"ai");
-b.innerHTML = (from==="ai"?`<strong>${getPersonaName(persona)}:</strong> `:"")+text;
+b.className = "bubble " + (from === "user" ? "user" : "ai");
+b.innerHTML = text;
 m.appendChild(b);
 chatDiv.appendChild(m);
 
-if(save){
+if (save){
 const h = JSON.parse(localStorage.getItem("chat_history") || "[]");
-h.push({from,text,time:Date.now(),persona});
+h.push({from, text, time: Date.now()});
 localStorage.setItem("chat_history", JSON.stringify(h));
 }
-chatDiv.scrollTop = chatDiv.scrollHeight;
-}
 
-function getPersonaName(persona){
-switch(persona){
-case "human": return "Human Tom";
-case "coder": return "Tom the Coder";
-case "researcher": return "Tom the Researcher";
-case "image": return "Tom the Image AI";
-default: return "Tom";
-}
+chatDiv.scrollTop = chatDiv.scrollHeight;
 }
 
 // ===== Typing animation =====
 function showTyping(){
 const m = document.createElement("div");
-m.className="msg"; m.id="typingRow";
-m.innerHTML=`<div class="bubble ai"><strong>Tom is typing</strong>
+m.className = "msg";
+m.id = "typingRow";
+m.innerHTML = `<div class="bubble ai"><strong>Tom is typing</strong>
 <span class="typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></span>
 </div>`;
-chatDiv.appendChild(m); chatDiv.scrollTop=chatDiv.scrollHeight;
+chatDiv.appendChild(m);
+chatDiv.scrollTop = chatDiv.scrollHeight;
 }
-function hideTyping(){ const t=document.getElementById("typingRow"); if(t) t.remove(); }
+function hideTyping(){
+const t = document.getElementById("typingRow");
+if(t) t.remove();
+}
 
 // ===== Send message =====
 sendBtn.onclick = sendMessage;
-msgInput.addEventListener("keydown", e=>{
-if(e.key==="Enter" && !e.shiftKey){ sendMessage(); e.preventDefault(); }
-if(e.key==="Enter" && e.shiftKey){
-const start = msgInput.selectionStart, end = msgInput.selectionEnd;
-msgInput.value = msgInput.value.substring(0,start)+"\n"+msgInput.value.substring(end);
-msgInput.selectionStart = msgInput.selectionEnd = start+1; e.preventDefault();
-}
-});
+msgInput.addEventListener("keydown", e => { if(e.key==="Enter") sendMessage(); });
 
 async function sendMessage(){
 const text = msgInput.value.trim();
 if(!text) return;
-const persona = personaSelect.value;
 
-errorDiv.textContent="";
-addMessageToUI("user", text, true, persona);
-msgInput.value="";
+errorDiv.textContent = "";
+addMessageToUI("user", text);
+msgInput.value = "";
 showTyping();
 
 try {
-const res = await fetch(BACKEND_URL,{
-method:"POST",
-headers:{
-"X-Parse-Application-Id":APP_ID,
-"X-Parse-REST-API-Key":REST_KEY,
-"Content-Type":"application/json"
+const res = await fetch(BACKEND_URL, {
+method: "POST",
+headers: {
+"X-Parse-Application-Id": APP_ID,
+"X-Parse-REST-API-Key": REST_KEY,
+"Content-Type": "application/json"
 },
-body: JSON.stringify({prompt:text, userKey, persona})
+body: JSON.stringify({ prompt: text, userKey })
 });
+
 if(!res.ok) throw new Error(`Server error: ${res.status}`);
+
 const data = await res.json();
 hideTyping();
+
 const reply = data.result?.choices?.[0]?.message?.content || "Tom didn't understand.";
-addMessageToUI("ai", reply, true, persona);
-}catch(err){ hideTyping(); errorDiv.textContent = "Error: "+err.message; }
+addMessageToUI("ai", reply);
+
+} catch(err){
+hideTyping();
+errorDiv.textContent = "Error: " + err.message;
+}
 }
 
 // ===== Clear chat =====
-clearBtn.onclick = ()=>{
-if(confirm("Are you sure you want to clear chat for this persona?")){
-const history = JSON.parse(localStorage.getItem("chat_history")||"[]");
-const newHistory = history.filter(m=>m.persona!==personaSelect.value);
-localStorage.setItem("chat_history", JSON.stringify(newHistory));
-loadLocalHistory();
+clearBtn.onclick = () => {
+if(confirm("Are you sure you want to clear the chat?")) {
+localStorage.removeItem("chat_history");
+chatDiv.innerHTML = "";
 }
 };
-
-// ===== Persona change =====
-personaSelect.onchange = loadLocalHistory;
 
 loadLocalHistory();
 </script>
