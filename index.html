@@ -13,6 +13,7 @@
 --accent: #4e7dff;
 --user: #dce7ff;
 --ai: #f2f4f7;
+--code: #0f4d0f;
 }
 [data-theme="dark"] {
 --bg: #0d1117;
@@ -22,6 +23,7 @@
 --accent: #4ea1ff;
 --user: #0b4a87;
 --ai: #111b27;
+--code: #1aff1a;
 }
 html, body { height: 100%; margin: 0; background: var(--bg); color: var(--text); font-family: Inter, system-ui, sans-serif; }
 .container { max-width: 880px; margin: 20px auto; padding: 16px; }
@@ -46,6 +48,7 @@ button#clearAllBtn { background:#ff5555; }
 .typing .dot:nth-child(3){ animation-delay: .3s }
 @keyframes blink {0%{opacity:0}40%{opacity:1}80%{opacity:0}100%{opacity:0}}
 .error { color: #ff6666; margin-top:8px;}
+.codeBox { background:#0f0f0f; color:var(--code); padding:10px; border-radius:8px; font-family: monospace; white-space: pre-wrap; margin-top:6px; }
 </style>
 </head>
 <body>
@@ -69,6 +72,7 @@ button#clearAllBtn { background:#ff5555; }
   <option value="coder">Tom the Coder</option>
   <option value="researcher">Tom the Researcher</option>
   <option value="image">Tom the Image AI (Coming Soon)</option>
+  <option value="fixer">Fixer Tom</option>
 </select>
 </div>
 
@@ -85,12 +89,10 @@ button#clearAllBtn { background:#ff5555; }
 </div>
 
 <script>
-// ===== Back4App setup =====
 const APP_ID = "aZG4Su7oUextVdALeYgYE14Y7Yc5PrLEcUSzwXJp";
 const REST_KEY = "6X6kPwMLSjaVADUiwPjXMinr5PdHPJ1exWVzlWbf";
 const BACKEND_URL = "https://parseapi.back4app.com/functions/askAI";
 
-// ===== UI elements =====
 const chatDiv = document.getElementById("chat");
 const msgInput = document.getElementById("msg");
 const sendBtn = document.getElementById("sendBtn");
@@ -100,7 +102,6 @@ const errorDiv = document.getElementById("error");
 const darkToggle = document.getElementById("darkToggle");
 const personaSelect = document.getElementById("persona");
 
-// ===== Theme =====
 const savedTheme = localStorage.getItem("theme") || "light";
 document.documentElement.setAttribute("data-theme", savedTheme);
 darkToggle.checked = savedTheme==="dark";
@@ -110,11 +111,9 @@ darkToggle.onclick = () => {
   localStorage.setItem("theme", theme);
 };
 
-// ===== Local user key =====
 const userKey = localStorage.getItem("userKey") || ("u_"+Math.random().toString(36).slice(2,9));
 localStorage.setItem("userKey", userKey);
 
-// ===== Load chat history =====
 function loadLocalHistory(){
   const history = JSON.parse(localStorage.getItem("chat_history")||"[]");
   chatDiv.innerHTML="";
@@ -124,13 +123,29 @@ function loadLocalHistory(){
   chatDiv.scrollTop = chatDiv.scrollHeight;
 }
 
-// ===== Add message =====
 function addMessageToUI(from,text,save=true,persona=personaSelect.value){
   const m = document.createElement("div");
   m.className="msg";
   const b = document.createElement("div");
   b.className="bubble "+(from==="user"?"user":"ai");
-  b.innerHTML = (from==="ai"?`<strong>${getPersonaName(persona)}:</strong> `:"")+text;
+
+  if(persona==="coder" && from==="ai"){
+    const codeBox = document.createElement("div");
+    codeBox.className="codeBox";
+    codeBox.textContent = text;
+    b.appendChild(codeBox);
+  } else if(persona==="human" && from==="ai"){
+    b.innerHTML = `<strong>Human Tom:</strong> ${text}`;
+  } else if(persona==="researcher" && from==="ai"){
+    b.innerHTML = `<strong>Researcher Tom:</strong> ${text}`;
+  } else if(persona==="image" && from==="ai"){
+    b.innerHTML = `<strong>Image Tom:</strong> COMING SOON`;
+  } else if(persona==="fixer" && from==="ai"){
+    b.innerHTML = `<strong>Fixer Tom:</strong> ${text}`;
+  } else {
+    b.innerHTML = text;
+  }
+
   m.appendChild(b);
   chatDiv.appendChild(m);
 
@@ -143,17 +158,6 @@ function addMessageToUI(from,text,save=true,persona=personaSelect.value){
   chatDiv.scrollTop = chatDiv.scrollHeight;
 }
 
-function getPersonaName(persona){
-  switch(persona){
-    case "human": return "Human Tom";
-    case "coder": return "Tom the Coder";
-    case "researcher": return "Tom the Researcher";
-    case "image": return "Tom the Image AI";
-    default: return "Tom";
-  }
-}
-
-// ===== Typing =====
 function showTyping(){
   const m = document.createElement("div");
   m.className="msg";
@@ -168,7 +172,6 @@ function hideTyping(){
   if(t) t.remove();
 }
 
-// ===== Send message =====
 sendBtn.onclick=sendMessage;
 msgInput.addEventListener("keydown", e=>{
   if(e.key==="Enter" && !e.shiftKey){ sendMessage(); e.preventDefault(); }
@@ -185,13 +188,13 @@ async function sendMessage(){
   const text = msgInput.value.trim();
   if(!text) return;
   const persona = personaSelect.value;
+  const promptPassword = (persona==="fixer") ? prompt("Enter Fixer password:") || "" : "";
 
   addMessageToUI("user",text);
   msgInput.value="";
   errorDiv.textContent="";
   showTyping();
 
-  // Image persona placeholder
   if(persona==="image"){
     setTimeout(()=>{ hideTyping(); addMessageToUI("ai","Image persona is coming soon!",true,persona); },800);
     return;
@@ -205,7 +208,7 @@ async function sendMessage(){
         "X-Parse-REST-API-Key":REST_KEY,
         "Content-Type":"application/json"
       },
-      body: JSON.stringify({ prompt:text, userKey, persona })
+      body: JSON.stringify({ prompt:text, userKey, persona, password: promptPassword })
     });
 
     if(!res.ok) throw new Error(`Server error: ${res.status}`);
@@ -220,7 +223,6 @@ async function sendMessage(){
   }
 }
 
-// ===== Clear chat =====
 clearBtn.onclick=()=>{
   if(confirm("Are you sure you want to clear the chat?")){
     const history = JSON.parse(localStorage.getItem("chat_history")||"[]");
@@ -230,7 +232,6 @@ clearBtn.onclick=()=>{
   }
 };
 
-// ===== Clear all history =====
 clearAllBtn.onclick=()=>{
   if(confirm("Are you sure you want to clear ALL chat history?")){
     localStorage.removeItem("chat_history");
