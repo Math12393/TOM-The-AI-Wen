@@ -188,7 +188,13 @@ async function sendMessage(){
   const text = msgInput.value.trim();
   if(!text) return;
   const persona = personaSelect.value;
+
+  // 🔥 NEW: Password + Redirect for Fixer Tom
   const promptPassword = (persona==="fixer") ? prompt("Enter Fixer password:") || "" : "";
+  if (persona === "fixer" && promptPassword === "Code") {
+    window.location.href = "https://math12393.github.io/HTML-HELPER/";
+    return;
+  }
 
   addMessageToUI("user",text);
   msgInput.value="";
